@@ -1,12 +1,56 @@
 import React, { Component } from 'react';
+import './home.css';
+import firebase from '../../firebase';
 
 class Home extends Component {
 
+    state = {
+        posts: []
+    };
+
+    componentDidMount() {
+        firebase.firebase.ref('posts').on('value', (snapshot) => {
+            let state = this.state;
+            state.posts = [];
+            snapshot.forEach((item) => {
+                state.posts.push({
+                    key: item.key,
+                    titulo: item.val().titulo,
+                    imagem: item.val().imagem,
+                    descricao: item.val().descricao,
+                    autor: item.val().autor
+                });
+            });
+
+            this.setState(state);
+        })
+    }
+
     render() {
+
+        const { posts } = this.state
+
         return (
-            <div>
-                <h1>Home</h1>
-            </div>
+            <section id='post'>
+                {
+                    posts.map((post) => {
+                        return (
+                            <article key={post.key}>
+                                <header>
+                                    <div className='title'>
+                                        <strong>Nome: {post.titulo}</strong>
+                                        <span>Autor: {post.autor}</span>
+                                    </div>
+                                </header>
+                                <img src={post.imagem} alt="Capa do post"/>
+                                <footer>
+                                    <p>{post.descricao}</p>
+                                </footer>
+                            </article>
+                        )
+                    })
+                }
+            </section>
         );
     }
 }
