@@ -1,13 +1,21 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import './global.css';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import Home from './view/home';
+import Header from './components/header';
 
-function App() {
-  return (
-    <div className="App">
-      
-    </div>
-  );
+class App extends Component {
+
+  render() {
+    return (
+      <BrowserRouter>
+        <Header/>
+        <Switch>
+          <Route exact path="/" component={Home} />
+        </Switch>
+      </BrowserRouter>
+    );
+  }
 }
 
 export default App;
