@@ -7,6 +7,7 @@ import firebase from './firebase';
 import Login from './view/login';
 import Dashboard from './view/dashboard';
 import Register from './view/register';
+import NewPost from './view/newpost';
 
 class App extends Component {
 
@@ -29,6 +30,7 @@ class App extends Component {
           <Route exact path="/" component={Home} />
           <Route exact path="/login" component={Login} />
           <Route exact path="/dashboard" component={Dashboard} />
+          <Route exact path="/dashboard/newpost" component={NewPost} />
           <Route exact path="/register" component={Register} />
         </Switch>
       </BrowserRouter>
