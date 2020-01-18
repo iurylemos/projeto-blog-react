@@ -24,7 +24,7 @@ class Firebase {
 
     login(email, password) {
         return firebase.auth().signInWithEmailAndPassword(email, password)
-    } 
+    }
 
     async register(nome, email, password) {
         await firebase.auth().createUserWithEmailAndPassword(email, password)
@@ -40,6 +40,10 @@ class Firebase {
         return new Promise(resolve => {
             firebase.auth().onAuthStateChanged(resolve)
         })
+    }
+
+    getCurrentUser() {
+        return firebase.auth().currentUser && firebase.auth().currentUser.email
     }
 
 

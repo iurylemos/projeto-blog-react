@@ -18,6 +18,13 @@ class Login extends Component {
     this.login = this.login.bind(this)
   }
 
+  componentDidMount() {
+    //Verificar se existe usuário logado
+    if (firebase.getCurrentUser()) {
+      return this.props.history.replace('/dashboard')
+    }
+  }
+
   login = async (event) => {
     event.preventDefault();
 
@@ -33,14 +40,13 @@ class Login extends Component {
           alert('Código de erro' + error.code)
           return null
         }
-      })
+      });
+      //Com o withRouter eu tenho acesso ao historico de navegação
+      this.props.history.replace('/dashboard')
     } catch (error) {
       console.log('Error', error)
       alert('error' + error)
     }
-
-
-
   }
 
 
