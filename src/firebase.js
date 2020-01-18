@@ -46,6 +46,17 @@ class Firebase {
         return firebase.auth().currentUser && firebase.auth().currentUser.email
     }
 
+    async getUserName(callback) {
+        //Verificar se existe algum usuário logado aqui tbm
+        if (!firebase.auth().currentUser) {
+            return null
+        }
+
+        const uid = firebase.auth().currentUser.uid;
+        await firebase.database().ref('usuarios').child(uid).once('value').then(callback)
+
+    }
+
 
 }
 
