@@ -10,12 +10,14 @@ class NewPost extends Component {
 
     this.state = {
       titulo: '',
-      imagem: '',
+      imagem: null,
       descricao: '',
-      alert: ''
+      alert: '',
+      url: '',
     }
 
     this.cadastrar = this.cadastrar.bind(this)
+    this.handleFile = this.handleFile.bind(this)
   }
 
   componentDidMount() {
@@ -24,6 +26,33 @@ class NewPost extends Component {
       this.props.history.replace('/login')
     }
 
+  }
+
+  handleFile = async (event) => {
+    if (event.target.files[0]) {
+      const imagem = event.target.files[0];
+      if (imagem.type === 'image/png' || imagem.type === 'image/jpeg') {
+        console.log(imagem)
+        await this.setState({ imagem: imagem })
+        const id_user = firebase.getCurrentID()
+        const uploadImagem = firebase.storage
+          .ref(`imagens/${id_user}/${imagem.name}`)
+          .put(imagem)
+
+        // await uploadImagem.on('state_changed', (snapshot) => {
+        //   //Progresso
+        // }, (error) => {
+        //   //Error
+        //   console.log('Imagem com errror',error)
+        // }, () => {
+        //   //Sucesso
+        // })
+      } else {
+        alert('Envie uma imagem do tipo PNG ou JPG')
+        this.setState({ imagem: null })
+        return null
+      }
+    }
   }
 
 
@@ -63,7 +92,7 @@ class NewPost extends Component {
           <input type="text" placeholder="Nome do post" value={titulo} onChange={(e) => this.setState({ titulo: e.target.value })} />
           <br />
           <label>URL da imagem:</label><br />
-          <input type="text" placeholder="URL da imagem" value={imagem} onChange={(e) => this.setState({ imagem: e.target.value })} />
+          <input type="file" onChange={this.handleFile} />
           <br />
           <label>Descrição:</label><br />
           <textarea type="text" placeholder="Descrição post" value={descricao} onChange={(e) => this.setState({ descricao: e.target.value })} />
