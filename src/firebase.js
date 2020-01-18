@@ -19,6 +19,7 @@ class Firebase {
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
 
+        //Referenciando a data base para acessar outros locais
         this.firebase = firebase.database();
     }
 
@@ -58,7 +59,6 @@ class Firebase {
 
         const uid = firebase.auth().currentUser.uid;
         await firebase.database().ref('usuarios').child(uid).once('value').then(callback)
-
     }
 
 

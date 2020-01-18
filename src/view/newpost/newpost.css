@@ -28,6 +28,12 @@ form#newformpost {
   border-radius: 5px;
 }
 
+form#newformpost span {
+  text-align: center;
+  color: #FF0000;
+  font-size: 15px;
+}
+
 form#newformpost input {
   margin-bottom: 10px;
 }

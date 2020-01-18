@@ -22,6 +22,10 @@ class Home extends Component {
                 });
             });
 
+            //Com esse reverse eu consigo fazer com que os últimos a serem inseridos
+            //Sejam os primeiros
+            state.posts.reverse();
+
             this.setState(state);
         })
     }
@@ -42,7 +46,7 @@ class Home extends Component {
                                         <span>Autor: {post.autor}</span>
                                     </div>
                                 </header>
-                                <img src={post.imagem} alt="Capa do post"/>
+                                <img src={post.imagem} alt="Capa do post" />
                                 <footer>
                                     <p>{post.descricao}</p>
                                 </footer>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
+import firebase from '../../firebase';
 import './newpost.css';
 
 class NewPost extends Component {
@@ -10,14 +11,40 @@ class NewPost extends Component {
     this.state = {
       titulo: '',
       imagem: '',
-      descricao: ''
+      descricao: '',
+      alert: ''
     }
 
     this.cadastrar = this.cadastrar.bind(this)
   }
 
+  componentDidMount() {
 
-  cadastrar() {
+    if (!firebase.getCurrentUser()) {
+      this.props.history.replace('/login')
+    }
+
+  }
+
+
+  cadastrar = async (event) => {
+    event.preventDefault()
+
+    if (this.state.titulo !== '' && this.state.imagem !== '' && this.state.descricao !== '') {
+      let posts = firebase.firebase.ref('posts');
+      //Criando uma chave dentro da referência
+      let chave = posts.push().key;
+      await posts.child(chave).set({
+        titulo: this.state.titulo,
+        imagem: this.state.imagem,
+        descricao: this.state.descricao,
+        autor: localStorage.nome
+      });
+
+      this.props.history.push('/dashboard')
+    } else {
+      this.setState({ alert: 'Preencha todos os campos' })
+    }
 
   }
 
@@ -31,6 +58,7 @@ class NewPost extends Component {
           <Link to="/dashboard">Voltar</Link>
         </header>
         <form id="newformpost" onSubmit={this.cadastrar}>
+          <span>{this.state.alert}</span>
           <label>Titulo:</label><br />
           <input type="text" placeholder="Nome do post" value={titulo} onChange={(e) => this.setState({ titulo: e.target.value })} />
           <br />
@@ -49,4 +77,4 @@ class NewPost extends Component {
   }
 }
 
-export default NewPost
+export default withRouter(NewPost)
