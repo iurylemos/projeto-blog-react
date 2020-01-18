@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Home from './view/home';
 import Header from './components/header';
 import firebase from './firebase';
+import Login from './view/login';
 
 class App extends Component {
 
@@ -21,14 +22,15 @@ class App extends Component {
   render() {
     return this.state.firebaseInitialized !== false ? (
       <BrowserRouter>
-        <Header/>
+        <Header />
         <Switch>
           <Route exact path="/" component={Home} />
+          <Route exact path="/login" component={Login} />
         </Switch>
       </BrowserRouter>
     ) : (
-      <h1>Carregando...</h1>
-    )
+        <h1>Carregando...</h1>
+      )
   }
 }
 
