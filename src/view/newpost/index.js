@@ -14,6 +14,7 @@ class NewPost extends Component {
       descricao: '',
       alert: '',
       url: '',
+      progresso: 0
     }
 
     this.cadastrar = this.cadastrar.bind(this)
@@ -39,14 +40,19 @@ class NewPost extends Component {
           .ref(`imagens/${id_user}/${imagem.name}`)
           .put(imagem)
 
-        // await uploadImagem.on('state_changed', (snapshot) => {
-        //   //Progresso
-        // }, (error) => {
-        //   //Error
-        //   console.log('Imagem com errror',error)
-        // }, () => {
-        //   //Sucesso
-        // })
+        await uploadImagem.on('state_changed', (snapshot) => {
+          //Progresso
+          const progresso = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
+          this.setState({ progresso })
+        }, (error) => {
+          //Error
+          console.log('Imagem com errror', error)
+        }, () => {
+          //Sucesso
+          firebase.storage.ref(`imagens/${id_user}`).child(imagem.name).getDownloadURL().then((url) => {
+            this.setState({ url: url })
+          })
+        })
       } else {
         alert('Envie uma imagem do tipo PNG ou JPG')
         this.setState({ imagem: null })
@@ -59,13 +65,13 @@ class NewPost extends Component {
   cadastrar = async (event) => {
     event.preventDefault()
 
-    if (this.state.titulo !== '' && this.state.imagem !== '' && this.state.descricao !== '') {
+    if (this.state.titulo !== '' && this.state.imagem !== '' && this.state.descricao !== '' && this.state.imagem !== null && this.state.url !== '') {
       let posts = firebase.firebase.ref('posts');
       //Criando uma chave dentro da referência
       let chave = posts.push().key;
       await posts.child(chave).set({
         titulo: this.state.titulo,
-        imagem: this.state.imagem,
+        imagem: this.state.url,
         descricao: this.state.descricao,
         autor: localStorage.nome
       });
@@ -79,7 +85,7 @@ class NewPost extends Component {
 
   render() {
 
-    const { titulo, imagem, descricao } = this.state
+    const { titulo, descricao } = this.state
 
     return (
       <div>
@@ -93,6 +99,12 @@ class NewPost extends Component {
           <br />
           <label>URL da imagem:</label><br />
           <input type="file" onChange={this.handleFile} />
+          {
+            this.state.url !== '' ?
+              <img src={this.state.url} width="250" height="150" alt="Capa do post" />
+              :
+              <progress value={this.state.progresso} max="100" />
+          }
           <br />
           <label>Descrição:</label><br />
           <textarea type="text" placeholder="Descrição post" value={descricao} onChange={(e) => this.setState({ descricao: e.target.value })} />

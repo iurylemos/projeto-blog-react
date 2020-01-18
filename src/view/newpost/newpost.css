@@ -34,6 +34,20 @@ form#newformpost span {
   font-size: 15px;
 }
 
+form#newformpost label {
+  margin-bottom: 15px;
+}
+
+form#newformpost img {
+  width: 200px;
+  height: 100px;
+  margin-bottom: 15px;
+}
+
+form#newformpost progress {
+  margin-bottom: 15px;
+}
+
 form#newformpost input {
   margin-bottom: 10px;
 }
